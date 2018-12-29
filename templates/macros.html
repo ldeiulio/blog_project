@@ -1,0 +1,33 @@
+{% macro render_entry(entry= '', authenticated=False, user_id=None) -%}
+<article class="entry">
+<header>
+        <div>
+            <h1><a href="/entry/{{ entry[0]['id'] }}" style="text-decoration: none">{{ entry[0]['title'] }}</a></h1>
+            <div class="metadata">created on {{ entry[0]['datetime'].strftime('%Y-%m-%d %H:%M:%S') }}
+                {% if entry[1] is not none %}
+                created by {{ entry[1] }}
+                {% endif%}
+
+                {% if authenticated and user_id|int == entry[0]['user_id'] %}
+                <a href="/entry/{{ entry[0]['id'] }}/edit" style="text-decoration: none">Edit</a>
+                <a href="/entry/{{ entry[0]['id'] }}/delete" style="text-decoration: none">Delete</a>
+                {% endif %}
+            </div>
+            <br>
+            <div>{{ entry[0]['content'] }}</div>
+        </div>
+
+    </header>
+    <p class="body">{{ entry[0]['body'] }}</p>
+</article>
+{%- endmacro %}
+
+{% macro render_form(title_value= '', body_text = '', button='post') -%}
+<form method="post">
+    <label for="title">Title</label>
+    <input name="title" id="title" value="{{ title_value }}" required>
+    <label for="body">Body</label>
+    <textarea name="body" id="body">{{ body_text }}</textarea>
+    <input type="submit" value="{{ button }}">
+</form>
+{%- endmacro %}

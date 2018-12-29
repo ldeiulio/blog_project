@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import render_form as render_form %}
+
+{% block header %}
+<h1>{% block title %}Edit Post{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+{{ render_form(title_value=entry['title'], body_text=entry['content'], button='save') }}
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import render_entry as render_entry %}
+
+{% block header %}
+<h1>{% block title %}Entry{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+{{ render_entry(entry=entry, authenticated=authenticated, user_id=user_id) }}
+
+{% endblock %}

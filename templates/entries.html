@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import render_entry as render_entry %}
+
+{% block header %}
+<h1>{% block title %}Entries{% endblock %}</h1>
+<p>posts per page:</p>
+<form class="form-inline" method="get">
+    <input list="numbers" name="limit" />
+    <datalist id="numbers">
+        {% for number in range(1, 101) %}
+        <option value= {{ number }} >
+            {% endfor %}
+    </datalist>
+    <input type="submit" value="set">
+</form>
+
+<a class="action" href="/entry/add">Create Post</a>
+{% endblock %}
+
+{% block content %}
+{% for entry in entries %}
+{{ render_entry(entry=entry, authenticated=authenticated, user_id=user_id) }}
+{% if not loop.last %}
+<hr>
+{% endif %}
+{% endfor %}
+{% if has_prev %}
+<a href="{{ prev_page }}">prev</a>
+{% endif %}
+{% if has_next %}
+<a href="{{ next_page }}">next</a>
+{% endif %}
+{% endblock %}

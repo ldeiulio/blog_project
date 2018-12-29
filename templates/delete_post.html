@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Delete Post{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<p>Are you sure you want to delete post?</p>
+<form method="post" style="display: inline-block">
+    <input type="submit" name="confirm" value="confirm">
+    <input type="submit" name="confirm" value="cancel">
+</form>
+{% endblock %}
