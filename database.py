@@ -5,7 +5,7 @@ from flask_migrate import Migrate
 from flask_login import UserMixin
 from .create_app import app
 
-#connects app to sqlalchemy and sets up for migration if it's necesarry
+# connects app to sqlalchemy and sets up for migration if it's necessary
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
