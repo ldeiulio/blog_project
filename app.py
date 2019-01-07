@@ -1,9 +1,9 @@
 from flask import render_template, abort, request, url_for, flash, redirect, g
-from .create_app import app
-from .database import Entry, create_all, db_session, User
+from create_app import app
+from database import Entry, create_all, db_session, User, Base
 from math import ceil
 from flask_login import login_required, current_user
-from . import login
+import login
 
 create_all()
 
@@ -23,12 +23,16 @@ def create_entry():
         if not title:
             flash("Title is required")
         else:
-            entry = Entry(title, body, current_user.id)
-            db_session.add(entry)
-            db_session.commit()
+            add_entry(title, body, current_user.id)
             return redirect('/')
 
     return render_template("new_post.html", authenticated=current_user.is_authenticated)
+
+
+def add_entry(title, body, user_id):
+    entry = Entry(title, body, user_id)
+    db_session.add(entry)
+    db_session.commit()
 
 
 # is index page, renders entries made to blog in reverse chronological order
@@ -108,6 +112,7 @@ def delete_entry(entry_id):
         if confirm == "confirm":
             db_session.delete(entry)
             db_session.commit()
+            flash("entry deleted")
         return redirect('/')
     return render_template("delete_post.html", authenticated=current_user.is_authenticated)
 

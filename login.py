@@ -1,7 +1,8 @@
 from flask_login import LoginManager, logout_user, login_user, login_required
 from flask import request, render_template, flash, redirect, abort
 from urllib.parse import urlparse, urljoin
-from .database import app, db_session, User
+from database import app, db_session, User
+from werkzeug.security import generate_password_hash, check_password_hash
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -18,13 +19,14 @@ def login():
     if request.method == "POST":
         email = request.form['email']
         query = db_session.query(User).filter_by(email=email).first()
-        if query is None or query.password != request.form['password']:
+        if query is None or not check_password_hash(query.password, request.form['password']):
             flash("incorrect email or password")
         else:
             login_user(query)
             next_url = request.args.get('next')
             if not is_safe_url(next_url):
                 return abort(400)
+            flash('logged in')
             return redirect(next_url or '/')
     return render_template("login.html")
 
@@ -49,7 +51,8 @@ def register():
         if request.form['password'] != request.form['confirm_password']:
             flash("passwords do not match")
             return render_template("register.html")
-        user = User(name=request.form['name'], email=request.form['email'], password=request.form['password'])
+        password = generate_password_hash(request.form['password'])
+        user = User(name=request.form['name'], email=request.form['email'], password=password)
         db_session.add(user)
         db_session.commit()
         login_user(user)
@@ -63,6 +66,7 @@ def register():
 @login_required
 def logout():
     logout_user()
+    flash('logged out')
     return redirect('/')
 
 

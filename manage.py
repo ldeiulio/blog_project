@@ -1,4 +1,4 @@
-from database import session, Entry
+from database import db_session, Entry
 from flask_script import Manager
 from database import app
 
@@ -20,10 +20,11 @@ def seed():
     for i in range(25):
         entry = Entry(
             title="Test Entry #{}".format(i),
-            content=content
+            content=content,
+            user_id=1
         )
-        session.add(entry)
-    session.commit()
+        db_session.add(entry)
+    db_session.commit()
 
 
 if __name__ == "__main__":

@@ -1,21 +1,26 @@
 import datetime
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import UserMixin
-from .create_app import app
+from create_app import app
 
+engine = create_engine('postgresql+pg8000://test:pass@localhost:5432/blog')
+Base = declarative_base()
+db_session = sessionmaker(bind=engine)()
 # connects app to sqlalchemy and sets up for migration if it's necessary
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+#db = SQLAlchemy(app)
+#migrate = Migrate(app, db)
 
 
-db_session = db.session
+#db_session = db.session
 
 
 # creates database if one does not already exist
 def create_all():
-    db.create_all()
+    Base.metadata.create_all(engine)
 
 
 # class that maps User objects to records of table users
@@ -23,7 +28,7 @@ def create_all():
 # name is stared as a string
 # email is stored as a string, must be unique
 # password stored as string, not encrypted in this implementation
-class User(db.Model, UserMixin):
+class User(Base, UserMixin):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
@@ -38,7 +43,7 @@ class User(db.Model, UserMixin):
 # datetime is time when entry was created, automatically specified
 # user_id establishes many to one relationship with users. Older entries may not have user_id for legacy reasons, but
 # all new Entry objects should include this
-class Entry(db.Model):
+class Entry(Base):
     __tablename__ = "entries"
 
     id = Column(Integer, primary_key=True)
