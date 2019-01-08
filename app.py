@@ -57,8 +57,8 @@ def display_entries(page):
 
     start = (page - 1) * g.num_per_page
     end = page * g.num_per_page
-    return render_template("entries.html", entries=entries[start:end], has_next=has_next(page), has_prev=has_prev(page),
-                           next_page=page_url(page+1), prev_page=page_url(page-1),
+    return render_template("entries.html", entries=entries[start:end], has_next=has_next(page, g.total_pages),
+                           has_prev=has_prev(page), next_page=page_url(page+1), prev_page=page_url(page-1),
                            authenticated=current_user.is_authenticated, user_id=current_user.get_id())
 
 
@@ -118,8 +118,8 @@ def delete_entry(entry_id):
 
 
 # determines if there is a next page of entries exists given current page
-def has_next(page):
-    return page < g.total_pages
+def has_next(page, total_pages):
+    return page < total_pages
 
 
 # return url to supplied page number
