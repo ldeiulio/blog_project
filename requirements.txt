@@ -23,7 +23,7 @@ soupsieve==1.6.2
 splinter==0.10.0
 SQLAlchemy==1.2.15
 urllib3==1.24.1
-waitress==1.1.0
+waitress==1.4.2
 WebOb==1.8.5
 WebTest==2.0.32
 Werkzeug==0.14.1
