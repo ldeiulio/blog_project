@@ -2,7 +2,7 @@ alembic==1.0.5
 beautifulsoup4==4.7.0
 Click==7.0
 cssselect==1.0.3
-Django==2.1.5
+Django==2.2.13
 Flask==1.0.2
 Flask-Login==0.4.1
 Flask-Migrate==2.3.1
